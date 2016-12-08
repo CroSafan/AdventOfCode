@@ -27,5 +27,12 @@ namespace AOCDay1UnitTest
             Mapper map = new Mapper();
             Assert.AreEqual(12, map.GetBlocks("R5,L5,R5,R3"));
         }
+
+        [TestMethod]
+        public void Example4VisitedTwiceTest()
+        {
+            Mapper map = new Mapper();
+            Assert.AreEqual(4, map.LocationVisitedTwice("R8, R4, R4, R8"));
+        }
     }
 }
