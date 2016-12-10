@@ -14,5 +14,12 @@ namespace AOCDay2UnitText
             string path = @"C:\Users\Antun\Documents\Visual Studio 2015\Projects\AdventOfCode\AdventOfCodeDay2\testinput.txt";
             Assert.AreEqual("1985", Helper.ReturnCode(path));
         }
+
+        [TestMethod]
+        public void Example2()
+        {
+            string path = @"C:\Users\Antun\Documents\Visual Studio 2015\Projects\AdventOfCode\AdventOfCodeDay2\testinput.txt";
+            Assert.AreEqual("5DB3", Helper.ReturnCode2(path));
+        }
     }
 }
