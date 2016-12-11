@@ -28,6 +28,54 @@ namespace AdventOfCodeDay4
                                   .ToArray());
         }
 
+        public static string GetRoomName(string input)
+        {
+            Regex RoomNameMatch = new Regex(@"^[A-z-]+");
+            return RoomNameMatch.Match(input).ToString();
+
+        }
+
+        public static string DecryptCode(string input, string id)
+        {
+            //almost gone crazy, so i gave up
+            //https://github.com/StefanPahlplatz/AdventOfCode/blob/master/Day%204%20Part%202/Day%204%20Part%202/Room.cs
+
+            int SectorId = Convert.ToInt32(id);
+            List<char> decryptedchar = new List<char>();
+
+            // Loop through the name
+            for (int i = 0; i < input.Length; i++)
+            {
+                // Replace - with a space
+                if (input[i] == '-')
+                {
+                    decryptedchar.Add(' ');
+                }
+                else
+                {
+                    // Get the int value of the current char
+                    int temp = input[i];
+
+                    // Increment with the sector id
+                    for (int j = 0; j < SectorId; j++)
+                    {
+                        temp++;
+                        if (temp > 122)     // Ascii value for z
+                            temp = 97;      // Ascii value for a
+                    }
+
+                    // Add the decrypted char
+                    decryptedchar.Add(Convert.ToChar(temp));
+                }
+            }
+
+            // Full decrypted string
+            string decrypted = "";
+            foreach (char c in decryptedchar) { decrypted += c; }
+
+            return decrypted;
+        }
+
 
         public static string GetCheckSum(string input)
         {
@@ -57,13 +105,18 @@ namespace AdventOfCodeDay4
             while (!sr.EndOfStream)
             {
                 string input = sr.ReadLine();
-                if (Solver.ReturnCode(input) == Solver.GetCheckSum(input))
+                if (Solver.DecryptCode(Solver.GetRoomName(input), Solver.GetRoomId(input)).Contains("nort"))
                 {
-                    sum += Convert.ToInt32(Solver.GetRoomId(input));
+                    Console.WriteLine(Solver.DecryptCode(Solver.GetRoomName(input), Solver.GetRoomId(input)));
+                    Console.WriteLine(Solver.GetRoomId(input));
+
                 }
             }
+
+
             Console.WriteLine(sum);
-           
+
+            //Console.WriteLine(Solver.DecryptCode(Solver.GetRoomName("qzmt-zixmtkozy-ivhz-343")));
             Console.Read();
         }
     }

@@ -47,5 +47,10 @@ namespace AOCDay4UnitTest
         {
             Assert.AreEqual("123", Solver.GetRoomId("aaaaa-bbb-z-y-x-123[abxyz]"));
         }
+        [TestMethod]
+        public void CheckingIfDecryptIsCorrect1()
+        {
+            Assert.AreEqual("very encrypted name", Solver.DecryptCode(Solver.GetRoomName("qzmt-zixmtkozy-ivhz-343"),Solver.GetRoomId("qzmt-zixmtkozy-ivhz-343")));
+        }
     }
 }
