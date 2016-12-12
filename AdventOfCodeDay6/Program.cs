@@ -21,6 +21,19 @@ namespace AdventOfCodeDay6
                                   .Take(1)
                                   .ToArray());
         }
+        private static string ReturnMostUnCommonLetter(string word)
+        {
+            char[] wordChars = word.ToCharArray();
+            List<char> distinctChars = wordChars.Distinct().Except(new[] { '-' }).ToList();
+            Dictionary<char, int> occurrences = distinctChars.ToDictionary(c => c,
+                                                                           c => wordChars.Count(x => x.Equals(c)));
+            return new string(
+                       occurrences.OrderBy(x => x.Value)
+                                  .ThenBy(x => x.Key)
+                                  .Select(x => x.Key)
+                                  .Take(1)
+                                  .ToArray());
+        }
 
         private static void Main(string[] args)
         {
@@ -32,7 +45,7 @@ namespace AdventOfCodeDay6
             int brojac = 0;
 
             List<string> input = new List<string>();
-            StreamReader sr = new StreamReader(pathToInput);
+            StreamReader sr = new StreamReader(pathToTestInput);
 
             while (!sr.EndOfStream)
             {
@@ -46,7 +59,7 @@ namespace AdventOfCodeDay6
                     mostCommon += word[brojac];
                 }
                 brojac++;
-                code += ReturnMostCommonLetter(mostCommon);
+                code += ReturnMostUnCommonLetter(mostCommon);
                 mostCommon = "";
             }
 
