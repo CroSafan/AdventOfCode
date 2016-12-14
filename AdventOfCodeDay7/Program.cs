@@ -12,24 +12,71 @@ namespace AdventOfCodeDay7
     {
         public static bool isAbba(string input)
         {
-            if (input[0] == input[3] && input[1] == input[2] && input[0] != input[2] && input[1] != input[3]) return true;
-            else return false;
-        }
-       
-        public static bool isTLS(string input)
-        {
-            bool istls = false;
-            var hypernet = input.Split('[', ']');
-            foreach(string hyper in hypernet)
+            for (int i = 0; i < input.Length - 3; i++)
             {
-                for (int i = 0; i < hyper.Length-4; i=i+4)
-                {
-                    string check = hyper[i] +""+ hyper[i + 1]+"" + hyper[i + 2]+""+hyper[i+3];
-                    istls = isAbba(hyper);
-                }
+                if (input[i] == input[i + 3] && input[i + 1] == input[i + 2] && input[i] != input[i + 2] && input[i + 1] != input[i + 3]) return true;
+
+            }
+            return false;
+        }
+
+        public static bool isABA(string input)
+        {
+            for (int i = 0; i < input.Length - 2; i++)
+            {
+                if (input[i] == input[i + 2] && input[i] != input[i + 1]) return true;
+
+            }
+            return false;
+        }
+
+        public static List<string> getABA(string input)
+        {
+            var ABAlist = new List<string>();
+            for (int i = 0; i < input.Length - 2; i++)
+            {
+                if (input[i] == input[i + 2] && input[i] != input[i + 1]) ABAlist.Add(string.Join("", input[i], input[i + 1], input[i + 2]));
+
             }
 
-            return istls;
+            return ABAlist;
+        }
+
+        public static string ABAtoBAB(string input)
+        {
+            return string.Join("", input[1], input[0], input[1]);
+        }
+
+
+        public static bool isSSL(string input)
+        {
+            List<string> abas = new List<string>();
+            List<string> babs = new List<string>();
+            List<string> babs1 = new List<string>();
+            string[] ips = input.Split('[', ']');
+            for (int i = 0; i < ips.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    if (isABA(ips[i])) abas.Add(ips[i]);
+                }
+                babs.Add(ips[i]);
+            }
+            foreach (var b in babs)
+            {
+                babs1.Add(ABAtoBAB(b));
+            }
+            int abaCount = 0;
+            foreach (var item in babs1)
+            {
+                if (babs.Contains(ABAtoBAB(item)))
+                {
+                    abaCount++;
+                }
+            }
+            if (abaCount == babs.Count - 1) return true;
+            else
+                return false;
         }
 
         static void Main(string[] args)
@@ -42,10 +89,29 @@ namespace AdventOfCodeDay7
             {
                 input.Add(sr.ReadLine());
             }
+            int countSupportingSSl = 0;
             foreach (var line in input)
             {
-
+                if (isSSL(line)) countSupportingSSl++;
             }
+            //part1
+            //linq credit to user /u/Senoy05
+            //didn't know you could do it like this 
+
+            int countSupportingTLS = input
+               .Select(i => i.Split('[', ']'))
+               .Select(i => new List<IEnumerable<bool>>
+               {
+                   i.Where((c, a) => a % 2 == 0).Select(a => isAbba(a)),
+                   i.Where((c, a) => a % 2 != 0).Select(a => isAbba(a))
+               }).Count(i => i[0].Any(a => a) && i[1].All(a => !a));
+            //part 2
+
+
+
+            Console.WriteLine(countSupportingTLS);
+            Console.WriteLine(countSupportingSSl);
+            Console.Read();
         }
     }
 }
